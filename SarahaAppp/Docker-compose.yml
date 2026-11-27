@@ -1,0 +1,25 @@
+
+services:
+  mongo:
+    image: mongo:8
+    container_name: saraha-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+
+  app:
+    build: .
+    container_name: saraha-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      MONGO_URI: mongodb://mongo:27017/saraha
+      PORT: 3000
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data:
